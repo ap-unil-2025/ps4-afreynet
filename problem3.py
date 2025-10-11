@@ -171,7 +171,7 @@ def count_contacts_with_email(contacts):
     # Count contacts where email is not empty
     count = 0
     for contact in contacts:
-        if contact['email'] is not "":
+        if contact['email'] != "":
             count += 1
     return count
     pass

@@ -33,6 +33,12 @@ def save_to_json(data, filename):
     # Hint:
     # with open(filename, 'w') as f:
     #     json.dump(data, f, indent=2)
+    with open(filename, 'w') as f:
+        try :
+            json.dump(data, f, indent=2)
+            return True
+        except :
+            return False
     pass
 
 
@@ -61,6 +67,11 @@ def load_from_json(filename):
     # Hint:
     # with open(filename, 'r') as f:
     #     return json.load(f)
+    with open(filename, 'r') as f:
+        try :
+            return json.load(f)
+        except :
+            return None
     pass
 
 
@@ -78,6 +89,12 @@ def save_contacts_to_file(contacts, filename="contacts.json"):
     # TODO: Implement this function
     # Use save_to_json() to save the contacts list
     pass
+    try :
+        save_to_json(contacts, filename)
+        return True
+    except :
+        return False
+
 
 
 def load_contacts_from_file(filename="contacts.json"):
@@ -93,6 +110,12 @@ def load_contacts_from_file(filename="contacts.json"):
     # TODO: Implement this function
     # Use load_from_json() to load contacts
     # If None is returned (file not found), return empty list []
+    try : 
+        contacts = load_from_json(filename)
+        return contacts
+    except None:
+        return []
+
     pass
 
 
@@ -112,6 +135,13 @@ def append_contact_to_file(contact, filename="contacts.json"):
     # 1. Load existing contacts
     # 2. Add new contact to list
     # 3. Save updated list back to file
+    try : 
+        contacts = load_from_json(filename)
+        contacts.append(contact)
+        save_to_json(contacts, filename)
+        return True
+    except : 
+        return False
     pass
 
 
@@ -128,6 +158,12 @@ def backup_file(source_filename, backup_filename):
     """
     # TODO: Implement this function
     # Load data from source_filename and save to backup_filename
+    try :
+        data = load_from_json(source_filename)
+        save_to_json(data, backup_filename)
+        return True
+    except :
+        return False
     pass
 
 
@@ -158,6 +194,11 @@ def get_file_stats(filename):
     # Get file size
     # Load data and check type
     # Return statistics dictionary
+    data = load_from_json(filename)
+    dict = { 'exists' : os.path.exists(filename), 'type' : type(data).__name__, 'count' : len(data) ,'size_bytes' : os.path.getsize(filename)
+
+    }
+    return dict
     pass
 
 
@@ -183,6 +224,18 @@ def merge_json_files(file1, file2, output_file):
     # 2. If both are lists, combine them
     # 3. Save combined list to output_file
     # 4. Handle cases where files might not exist
+    try :
+        list1 = load_from_json(file1)
+        list2 = load_from_json(file2)
+    
+        if type(list1) == type(list2):
+            list1.extend(list2)
+            save_to_json(list1, output_file)
+            return True
+        else:
+            return False
+    except :
+        print("at least 1 file is missing...")
     pass
 
 
@@ -205,6 +258,12 @@ def search_json_file(filename, key, value):
     """
     # TODO: Implement this function
     # Load data and filter items where item[key] == value
+    data = load_from_json(filename)
+    list = []   
+    for item in data:
+        if item[key] == value:
+            list.append(item)
+    return list
     pass
 
 
